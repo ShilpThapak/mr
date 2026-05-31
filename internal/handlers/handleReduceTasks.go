@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"os"
-	"path/filePath"
+	"path/filepath"
 	"fmt"
 	"github.com/ShilpThapak/mr/internal/mapReduce/wc"
 	"github.com/ShilpThapak/mr/internal/models"

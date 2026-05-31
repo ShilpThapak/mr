@@ -20,7 +20,6 @@ func BulkWriteToFile(kvMap map[string][]models.KeyValue) {
 			utils.Check(e2)
 			_, e := fmt.Fprintln(file, string(jsonData))
 			utils.Check(e)
-			fmt.Println("written ", filepath, kv)
 		}
 	}
 }
@@ -35,7 +34,6 @@ func WriteToFile(filepath string, kv models.KeyValue) {
 
 	_, e := fmt.Fprintln(file, string(jsonData))
 	utils.Check(e)
-	fmt.Println("written ", filepath, kv)
 }
 
 

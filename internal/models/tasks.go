@@ -2,11 +2,17 @@ package models
 
 type TaskStatus string
 type TaskType string
+type Phase string
 
 const (
 	Pending TaskStatus = "Pending"
 	Inprogress TaskStatus = "Inprogress"
 	Done TaskStatus = "Done"
+)
+
+const (
+	MapPhase Phase = "MapPhase"
+	ReducePhase Phase = "ReducePhase"
 )
 
 const (

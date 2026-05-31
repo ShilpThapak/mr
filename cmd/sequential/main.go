@@ -10,20 +10,17 @@ import (
 const ReducerCnt int = 10
 
 func main(){
-	fmt.Println("Hello world")
+	var filenames []string
 
-	var filenames string
-	// Get the filename
 	if (len(os.Args) > 1) {
-		filenames = os.Args[1]
+		filenames = os.Args[1:]
 		fmt.Println("Recieved the files to process: ", filenames)
 	} else {
-		// panic("No filename passes. Usage: go run sample.go filename.txt")
 		fmt.Println(("No filenames passed. \nUsage: go run sample.go filename.txt"))
 		return
 	}
 
-	for idx, filename := range os.Args[1:] {
+	for idx, filename := range filenames {
 		var mapTask models.Task
 		mapTask.Id = idx
 		mapTask.FileName = filename
