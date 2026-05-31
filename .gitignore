@@ -1,2 +1,2 @@
-intermediate/*.txt
-outputs/*.txt
+intermediate/mr-*.txt
+outputs/mr-*.txt
