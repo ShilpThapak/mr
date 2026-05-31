@@ -1,0 +1,1 @@
+Folder to store the intermedediate result after the map task
