@@ -8,7 +8,7 @@ go run cmd/sequential/main.go
 ### Distributed:
 Start Cordinator:
 ```
-go run cmd/cordinator/main.go
+go run cmd/cordinator/main.go inputs/pg-*.txt
 ```
 Start Workers:
 ```
