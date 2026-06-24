@@ -1,3 +1,12 @@
+A distributed MapReduce implementation in Go with a Coordinator-Worker architecture.
+
+* Parallel processing
+* Fault-tolerant task recovery
+* Dynamic task scheduling
+* Horizontal scalability
+* Reliable MapReduce execution
+
+
 ## Usage:
 
 ### Sequential:
