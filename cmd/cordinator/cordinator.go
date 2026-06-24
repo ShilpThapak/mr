@@ -23,7 +23,6 @@ type Cordinator struct {
 	NReduce int
 }
 
-
 func (c *Cordinator) HandleTaskRequests(args *models.TaskRequestArgs, reply *models.TaskRequestReply) error {
 	c.Mu.Lock()
 	defer c.Mu.Unlock()
@@ -33,13 +32,18 @@ func (c *Cordinator) HandleTaskRequests(args *models.TaskRequestArgs, reply *mod
 
 	allMapTasksDone := true
 	for idx, task := range c.Tasks {
-		switch task.Status {
-			case models.Pending:
-				reply.Task = task
-				c.Tasks[idx].Status = models.Inprogress
-				return nil
-			case models.Inprogress:
-				allMapTasksDone = false
+		if task.Status == models.Pending {
+			reply.Task = task
+			c.Tasks[idx].Status = models.Inprogress
+			c.Tasks[idx].LastAssigned = time.Now()
+			return nil
+		} else if (task.Status == models.Inprogress) && (time.Since(c.Tasks[idx].LastAssigned) > 20 * time.Second) {
+			fmt.Printf("[CORDINATOR][%s] Task %d took longer than %d seconds. Retrying.. \n", c.Phase, task.Id, 20)
+			reply.Task = task
+			c.Tasks[idx].LastAssigned = time.Now()
+			return nil
+		} else if task.Status == models.Inprogress {
+			allMapTasksDone = false
 		}
 	}
 
@@ -72,14 +76,18 @@ func (c *Cordinator) HandleTaskRequests(args *models.TaskRequestArgs, reply *mod
 	
 	allReduceTasksDone := true
 	for idx, task := range c.Tasks {
-		switch task.Status {
-			case models.Pending:
-				reply.Task = task
-				c.Tasks[idx].Status = models.Inprogress
-				c.Tasks[idx].LastAssigned = time.Now()
-				return nil
-			case models.Inprogress:
-				allReduceTasksDone = false
+		if task.Status == models.Pending {
+			reply.Task = task
+			c.Tasks[idx].Status = models.Inprogress
+			c.Tasks[idx].LastAssigned = time.Now()
+			return nil
+		} else if task.Status == models.Inprogress && time.Since(c.Tasks[idx].LastAssigned) > 20 * time.Second {
+			fmt.Printf("[CORDINATOR][%s] Task %d took longer than %d seconds. Retrying.. \n", c.Phase, task.Id, 20)
+			reply.Task = task
+			c.Tasks[idx].LastAssigned = time.Now()
+			return nil
+		} else if task.Status == models.Inprogress {
+			allReduceTasksDone = false
 		}
 	}
 
@@ -171,5 +179,7 @@ func main() {
 	for c.Done(allTasksDone) == false {
 		time.Sleep(1 * time.Second)
 	}
+
 	fmt.Println("[CORDINATOR] All tasks done. Shutting down..")
+	time.Sleep(5 * time.Second)
 }

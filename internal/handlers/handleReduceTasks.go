@@ -14,7 +14,6 @@ func HandleReduceTasks(task models.Task, reducef func(string, []string) string) 
 	infilename := fmt.Sprintf("intermediate/mr-*-%d.txt", task.Id)
 	filenames, err := filepath.Glob(infilename)
 	utils.Check(err)
-	fmt.Println("Got the files. Count: ", len(filenames), infilename)
 
 	fileKVMap := make(map[string][]string)
 

@@ -18,13 +18,14 @@ func call(rpcname string, args interface{}, reply interface{}) bool {
 	c, err := rpc.DialHTTP("unix", sockname)
 	if err != nil {
 		fmt.Println("[WORKER] dialing:", err)
+		panic(err)
 	}
 	defer c.Close()
 
 	err = c.Call(rpcname, args, reply)
 	if err != nil {
 			fmt.Println(err)
-			return false
+			panic(err)
 	}
 
 	return true
@@ -70,13 +71,14 @@ func main(){
 
 		wait := reply.Wait
 		if wait {
-			fmt.Println("[WORKER] Waiting for task..", reply.Task)
-			time.Sleep(5 * time.Second)
+			fmt.Println("[WORKER] Waiting for task..")
+			time.Sleep(1 * time.Second)
 			continue
 		}
 
 		allDone := reply.AllDone
 		if allDone {
+			fmt.Println("[WORKER] All tasks done. Worker shutting down..")
 			os.Exit(0)
 			return
 		}
