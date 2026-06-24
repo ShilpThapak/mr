@@ -2,21 +2,24 @@
 
 ### Sequential:
 ```
-go run cmd/sequential/main.go
+go build -buildmode=plugin -race -o plugins/wc.so plugins/wc/wc.go
+./bin/sequential plugins/wc/wc.so inputs/pg-*.txt
 ```
 
 ### Distributed:
 Start Cordinator:
 ```
-go run cmd/cordinator/main.go inputs/pg-*.txt
+go build -buildmode=plugin -race -o plugins/wc/wc.so plugins/wc/wc.go
+./bin/cordinator inputs/pg-*.txt
 ```
 Start Workers:
 ```
-go run cmd/worker/main.go
+go build -buildmode=plugin -race -o plugins/wc/wc.so plugins/wc/wc.go
+./bin/worker plugins/wc/wc.so
 ```
 
 ---
-Don't forget to clean up temp files before restating
+Don't forget to clean up temp files before retrying
 ```
 rm -r outputs/mr-*.txt intermediate/mr-*.txt
 ```
@@ -27,9 +30,5 @@ cat outputs/mr-*.txt | sort | more
 ```
 
 ### Pending
-- Add Gorotines to make it parallel
-- Add support for custom map reduce functions
 - Make NReduce variable
-- Improve the cli calling lines
-- All Shell script to run this multiple times
 - Add Tests to check for fault tolerance

@@ -1,2 +1,4 @@
 intermediate/mr-*.txt
 outputs/mr-*.txt
+
+*.so

@@ -1,1 +1,1 @@
-Folder to store the reduce results
+Folder to store the reduce results or final results

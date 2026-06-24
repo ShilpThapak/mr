@@ -6,12 +6,11 @@ import (
 	"os"
 	"path/filepath"
 	"fmt"
-	"github.com/ShilpThapak/mr/internal/mapReduce/wc"
 	"github.com/ShilpThapak/mr/internal/models"
 	"github.com/ShilpThapak/mr/internal/utils"
 )
 
-func HandleReduceTasks(task models.Task) {
+func HandleReduceTasks(task models.Task, reducef func(string, []string) string) {
 	infilename := fmt.Sprintf("intermediate/mr-*-%d.txt", task.Id)
 	filenames, err := filepath.Glob(infilename)
 	utils.Check(err)
@@ -43,7 +42,7 @@ func HandleReduceTasks(task models.Task) {
 	defer outFile.Close()
 
 	for key, value := range fileKVMap {
-		reduceResult := wc.Reduce(key, value)
+		reduceResult := reducef(key, value)
 		_, err := fmt.Fprintf(outFile, "%s %s\n", key, reduceResult)
 		utils.Check(err)
 	}

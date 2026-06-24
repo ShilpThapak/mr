@@ -15,6 +15,7 @@ type TaskRequestArgs struct {
 type TaskRequestReply struct {
 	Task Task
 	Wait bool
+	AllDone bool
 }
 
 type TaskCompletionArgs struct {

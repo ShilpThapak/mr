@@ -5,7 +5,6 @@ import (
 	"github.com/ShilpThapak/mr/internal/models"
 	"github.com/ShilpThapak/mr/internal/storage"
 	"github.com/ShilpThapak/mr/internal/utils"
-	"github.com/ShilpThapak/mr/internal/mapReduce/wc"
 	"strconv"
 	"hash/fnv"
 )
@@ -31,14 +30,13 @@ func WriteIntermediateFile(lines []models.KeyValue, ReducerCnt int, TaskId int) 
 	storage.BulkWriteToFile(kvMap)
 }
 
-func HandleMapTasks(task models.Task) {
+func HandleMapTasks(task models.Task, mapf func(string, string) []models.KeyValue) {
 	filename := task.FileName
-	task.Status = "Inprogress"
 
 	// Read the file
 	content, err := os.ReadFile(filename)
 	utils.Check(err)
 
-	mrOutput := wc.Map(filename, string(content))
+	mrOutput := mapf(filename, string(content))
 	WriteIntermediateFile(mrOutput, task.ReducerCnt, task.Id)
 }

@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type TaskStatus string
 type TaskType string
 type Phase string
@@ -22,7 +24,7 @@ const (
 
 type KeyValue struct {
 	Key string
-	Value int
+	Value string
 }
 
 type Task struct {
@@ -31,4 +33,5 @@ type Task struct {
 	FileName string
 	ReducerCnt int
 	Status TaskStatus
+	LastAssigned time.Time
 }
